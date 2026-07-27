@@ -44,3 +44,28 @@ def create_vector_embedding():
 st.title("RAG Document Q&A With Groq And Lama3")
 
 user_prompt=st.text_input("Enter your query from the research paper")
+if st.button("Document Embedding"):
+    create_vector_embedding()
+    st.write("Vector Database is ready")
+
+import time
+
+if user_prompt:
+    document_chain=create_stuff_documents_chain(llm,prompt)
+    retriever=st.session_state.vectors.as_retriever()
+    retrieval_chain=create_retrieval_chain(retriever,document_chain)
+
+    start=time.process_time()
+    response=retrieval_chain.invoke({'input':user_prompt})
+    print(f"Response time :{time.process_time()-start}")
+
+    st.write(response['answer'])
+
+    ## With a streamlit expander
+    with st.expander("Document similarity Search"):
+        for i,doc in enumerate(response['context']):
+            st.write(doc.page_content)
+            st.write('------------------------')
+
+
+
