@@ -18,3 +18,17 @@ os.environ['OPENAI_API_KEY']=os.getenv("OPENAI_API_KEY")
 os.environ['GROQ_API_KEY']=os.getenv("GROQ_API_KEY")
 
 groq_api_key=os.getenv("GROQ_API_KEY")
+llm=ChatGroq(groq_api_key=groq_api_key,model_name="Llama3-8b-8192")
+
+prompt=ChatPromptTemplate.from_template(
+    """
+    Answer the questions based on the provided context only.
+    Please provide the most accurate respone based on the question
+    <context>
+    {context}
+    <context>
+    Question:{input}
+
+    """
+
+)
